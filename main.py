@@ -44,7 +44,7 @@ def processImage(image):
         bottom_right = (top_left[0] + w, top_left[1] + h)
         # cv2.rectangle(image, top_left, bottom_right, (0, 255, 0), 1)
 
-        center = (top_left[0] + w//2, top_left[1] + h//2)
+        center = (top_left[0] + w//2 - 1, top_left[1] + h//2 - 1)
         cv2.circle(image, center, 16, (0, 255, 0), 1)
         cv2.circle(image, center, 11, (0, 255, 0), 1)
 
