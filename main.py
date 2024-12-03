@@ -2,7 +2,35 @@ import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 import math
+import os
 
+##################################
+chaine="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe -h"
+chaine="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe  -D d1=22 -D d2=10 -D l_table=100 -D c1=[160/255,119/255,109/255] -D c2=[249/255,58/255,58/255]  --camera arg=13,-12,18,45.2,0,355.4,292 -o image1.png ../Openscad/BouchonMire.scad"
+os.system(chaine)
+print("openscad")
+exit()
+##################################
+
+def estimate_rigid_transform(p1_a, p2_a, p1_b, p2_b):
+    v_a = np.array([p2_a[0] - p1_a[0], p2_a[1] - p1_a[1]])
+    v_b = np.array([p2_b[0] - p1_b[0], p2_b[1] - p1_b[1]])
+
+    norm_v_a = np.linalg.norm(v_a)
+    norm_v_b = np.linalg.norm(v_b)
+
+    cos_theta = np.dot(v_a, v_b) / (norm_v_a * norm_v_b)
+    sin_theta = (v_a[0] * v_b[1] - v_a[1] * v_b[0]) / (norm_v_a * norm_v_b)
+    theta = np.arctan2(sin_theta, cos_theta)
+
+    rotation_matrix = np.array([
+        [np.cos(theta), -np.sin(theta)],
+        [np.sin(theta), np.cos(theta)]
+    ])
+
+    translation = np.array(p1_b) - np.dot(rotation_matrix, np.array(p1_a))
+
+    return theta, translation[0], translation[1]
 
 def create_pattern_and_mask(width, d1, d2, bgr_color_center, bgr_color_contour):
 
@@ -20,18 +48,31 @@ def create_pattern_and_mask(width, d1, d2, bgr_color_center, bgr_color_contour):
                 img_bouchon[u,v] = (bgr_color_contour) 
                 img_mask_bouchon[u,v] = (255,255,255)
 
-    cv2.imwrite('template_bouchon.png', img_bouchon)
-    cv2.imwrite('template_mask_bouchon.png', img_mask_bouchon)
+    cv2.imwrite('src/images/template/template_bouchon.png', img_bouchon)
+    cv2.imwrite('src/images/template/template_mask_bouchon.png', img_mask_bouchon)
 
+def drawcross(image,u,v):
+    cv2.line(image,(u-5,v),(u+5,v),(0,255,0),1)
+    cv2.line(image,(u,v-5),(u,v+5),(0,255,0),1)
 
-def processImage(image):
-    template = cv2.imread('template_bouchon.png')
-    mask = cv2.imread('template_mask_bouchon.png')
+def processImage(image: str, srcPoints):
+
+    if image is None:
+        raise FileNotFoundError(f"Impossible de charger l'image : {image_path}")
+
+    target_points  = np.array([[0, 0], [167, 0], [167, 167], [0, 167]], dtype=np.float32)
+    homography, _ = cv2.findHomography(srcPoints, target_points )
+    transformed_image = cv2.warpPerspective(image, homography, (168, 168))
+
+    cv2.imwrite("transformed_image.png", transformed_image)
+    
+    template = cv2.imread('src/images/template/template_bouchon.png')
+    mask = cv2.imread('src/images/template/template_mask_bouchon.png')
     # Obtenir les dimensions du modèle
-    w, h = template.shape[:2]
+    w, h,  = template.shape[:2]
 
     # Appliquer le template matching
-    result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask=mask)
+    result = cv2.matchTemplate(transformed_image, template, cv2.TM_CCOEFF_NORMED, mask=mask)
 
     # Trouver la position du maximum de la correspondance
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
@@ -41,21 +82,32 @@ def processImage(image):
     if max_val>0.5:
         # Dessiner un rectangle autour de la zone correspondante
         top_left = max_loc
+        top_right = (top_left[0] + w, top_left[1])
+        bottom_left = (top_left[0] , top_left[1] + h)
         bottom_right = (top_left[0] + w, top_left[1] + h)
         # cv2.rectangle(image, top_left, bottom_right, (0, 255, 0), 1)
 
-        center = (top_left[0] + w//2 - 1, top_left[1] + h//2 - 1)
-        cv2.circle(image, center, 16, (0, 255, 0), 1)
-        cv2.circle(image, center, 11, (0, 255, 0), 1)
+        center = (top_left[0] + w//2, top_left[1] + h//2)
+        # cv2.circle(transformed_image, center, 16, (0, 255, 0), 1)
+        # cv2.circle(transformed_image, center, 11, (0, 255, 0), 1)
+        drawcross(transformed_image,top_left[0],top_left[1])
+        drawcross(transformed_image,bottom_right[0],bottom_right[1])
+        drawcross(transformed_image,top_right[0],top_right[1])
+        drawcross(transformed_image,bottom_left[0],bottom_left[1])
+        cv2.line(transformed_image,top_left,top_right,(255,0,0),1)
+        cv2.line(transformed_image,top_left,bottom_left,(255,0,0),1)
+        cv2.line(transformed_image,top_right,bottom_right,(255,0,0),1)
+        cv2.line(transformed_image,bottom_left,bottom_right,(255,0,0),1)
+        drawcross(transformed_image,center[0],center[1])
 
-    cv2.imshow('Template Matching', image)
+    cv2.imshow('Template Matching', transformed_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 
 #Programme
 
-with open('listecolors.out', 'r') as file:
+with open('src/data/listecolors.out', 'r') as file:
     # Créer une liste pour stocker les données
     couleurs = []
     
@@ -70,7 +122,26 @@ with open('listecolors.out', 'r') as file:
         # Ajouter les valeurs extraites à la liste data
         couleurs.append(values)
 
+with open('src/data/listepoints.out', 'r') as file:
+    points = []
+    
+    # Lire chaque ligne du fichier
+    for line in file:
+        # Supprimer les espaces et couper la ligne à la virgule
+        coordinates = line.strip().split(',')
+        
+        # Convertir les coordonnées en float et les ajouter à la liste points
+        x = float(coordinates[0].strip())
+        y = float(coordinates[1].strip())
+        points.append((x, y))
+
+# Afficher la liste des points
+print(points)
+
+theta, translation_x, translation_y = estimate_rigid_transform(points[0],points[1],points[2],points[3])
+print(f"theta: {theta} \n translation_x: {translation_x} \n translation_y: {translation_y}" )
+
 create_pattern_and_mask(32,32,22,couleurs[1],couleurs[0])
-for i in range (1,7):
-    image = cv2.imread(f'imabouchon{i}_rect.jpg')
-    processImage(image)
+pixels_mire_source = np.array([[991, 564], [655, 489], [593, 831], [949, 900]], dtype=np.float32)
+image = cv2.imread("src/images/bouchon/imabouchon1.jpg")
+processImage(image, pixels_mire_source)

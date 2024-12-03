@@ -7,7 +7,7 @@ def overprinting_outline_targe(image: str, pixels: np.array, color: tuple, thick
     for pixel in range(len(pixels)):
         cv2.line(image, tuple(pixels[pixel]), tuple(pixels[(pixel + 1) % len(pixels)]), color, thickness)
 
-    cv2.imwrite("outline_targe.png", image)
+    cv2.imwrite("outline_target.png", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
