@@ -3,10 +3,21 @@ import cv2
 import numpy as np
 import math
 import os
+import random
 
 ##################################
-chaine="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe -h"
-chaine="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe  -D d1=22 -D d2=10 -D l_table=100 -D c1=[160/255,119/255,109/255] -D c2=[249/255,58/255,58/255]  --camera arg=13,-12,18,45.2,0,355.4,292 -o image1.png ../Openscad/BouchonMire.scad"
+executableopenscad="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe"
+d1=10
+d2=5
+l_table=1000
+l_mire=70
+l_coin=2
+mire=1
+u=random.randint(-l_mire//2+d1//2,l_mire//2-d1//2)
+v=random.randint(-l_mire//2+d1//2,l_mire//2-d1//2)
+c1="[160/255,119/255,109/255]"
+c2="[249/255,58/255,58/255]"
+chaine=f'" {executableopenscad}" -D d1={d1} -D d2={d2} -D u={u} -D v={v} -D l_table={l_table} -D c1={c1} -D c2={c2} -D l_coin={l_coin} -D l_mire={l_mire} -D mire={mire} --camera 13,-12,18,45.2,0,355.4,292 -o image1.png ../Openscad/BouchonMire.scad'
 os.system(chaine)
 print("openscad")
 exit()
