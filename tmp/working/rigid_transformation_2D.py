@@ -19,9 +19,3 @@ def estimate_rigid_transform(p1_a, p2_a, p1_b, p2_b):
     translation = np.array(p1_b) - np.dot(rotation_matrix, np.array(p1_a))
 
     return theta, translation[0], translation[1]
-
-A = np.array([[0, 0], [1, 0]])
-B = np.array([[1, 1], [2, 1]])
-
-theta, translation_x, translation_y = estimate_rigid_transform(A[0], A[1], B[0], B[1])
-print(f"theta: {theta} \n translation_x: {translation_x} \n translation_y: {translation_y}" )

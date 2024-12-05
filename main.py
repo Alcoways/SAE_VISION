@@ -6,7 +6,7 @@ import os
 import random
 
 ##################################
-executableopenscad="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe"
+""" executableopenscad="D:\OpenSCAD-2021.01-x86-64\openscad-2021.01\openscad.exe"
 d1=10
 d2=5
 l_table=1000
@@ -20,7 +20,7 @@ c2="[249/255,58/255,58/255]"
 chaine=f'" {executableopenscad}" -D d1={d1} -D d2={d2} -D u={u} -D v={v} -D l_table={l_table} -D c1={c1} -D c2={c2} -D l_coin={l_coin} -D l_mire={l_mire} -D mire={mire} --camera 13,-12,18,45.2,0,355.4,292 -o image1.png ../Openscad/BouchonMire.scad'
 os.system(chaine)
 print("openscad")
-exit()
+exit() """
 ##################################
 
 def estimate_rigid_transform(p1_a, p2_a, p1_b, p2_b):
