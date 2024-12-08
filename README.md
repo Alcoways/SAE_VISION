@@ -23,6 +23,6 @@ Alcoways: https://github.com/Alcoways
 Wastrix: https://github.com/Wastrix
 
 ## References
-Wiki Bertrand VANDEPORTAELE: https://bvdp.inetdoc.net/wiki/doku.php?id=start
-Project link: https://bvdp.inetdoc.net/wiki/doku.php?id=saevisionbut3
-OpenCV Documentation: https://opencv.org
+Wiki Bertrand VANDEPORTAELE: https://bvdp.inetdoc.net/wiki/doku.php?id=start  
+Project link: https://bvdp.inetdoc.net/wiki/doku.php?id=saevisionbut3  
+OpenCV Documentation: https://opencv.org  
