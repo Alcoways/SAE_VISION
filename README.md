@@ -19,8 +19,8 @@ Its goal is to locate bottle caps in images using two different methods:
     ```
 
 ## Contributors
-Alcoways: https://github.com/Alcoways
-Wastrix: https://github.com/Wastrix
+Alcoways: https://github.com/Alcoways  
+Wastrix: https://github.com/Wastrix  
 
 ## References
 Wiki Bertrand VANDEPORTAELE: https://bvdp.inetdoc.net/wiki/doku.php?id=start  
