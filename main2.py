@@ -1,7 +1,9 @@
-import numpy as np
+from src.cap_recognization_methods import *
 from src.utils import *
 
-A = np.array([[0, 0], [1, 0]])
+import numpy as np
+
+""" A = np.array([[0, 0], [1, 0]])
 B = np.array([[1, 1], [2, 1]])
 
 estimator = RigidTransform2DEstimator(A[0], A[1], B[0], B[1])
@@ -29,4 +31,9 @@ pixels_mire_source = np.array([[991, 564], [655, 489], [593, 831], [949, 900]], 
 output_path = "res/images/generated/bouchon/transformed_image.png"
 
 transformer = ImageTransformer(image_path, pixels_mire_source)
-transformer.process(output_path)
+transformer.process(output_path) """
+
+# Concentric circles method
+image_path = "res/images/sources/bouchon/imabouchon1.jpg"
+detector = ConcentricCirclesDetector(image_path)
+detector.process()
