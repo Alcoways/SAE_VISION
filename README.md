@@ -5,6 +5,7 @@ Its goal is to locate bottle caps in images using two different methods:
 
 - **Method 1**: Detection by pattern and mask  
 - **Method 2**: Detection by concentric circles  
+- **Method 3**: Detection by concentric ellipses 
 
 ## Installation
 
