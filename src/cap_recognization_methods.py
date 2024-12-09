@@ -14,7 +14,7 @@ class ConcentricCirclesDetector:
     def load_image(self):
         self.image = cv2.imread(self.image_path, cv2.IMREAD_COLOR)
         if self.image is None:
-            raise ValueError("Impossible de charger l'image depuis le chemin spécifié.")
+            raise FileNotFoundError(f"Image not found at: {self.image_path}")
 
     def preprocess_image(self):
         self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -67,7 +67,7 @@ class ConcentricEllipsesDetector:
     def load_image(self):
         self.image = cv2.imread(self.image_path)
         if self.image is None:
-            raise FileNotFoundError(f"Image non trouvée : {self.image_path}")
+            raise FileNotFoundError(f"Image not found at: {self.image_path}")
 
     def preprocess_image(self):
         self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)

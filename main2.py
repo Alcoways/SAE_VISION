@@ -34,6 +34,7 @@ transformer = ImageTransformer(image_path, pixels_mire_source)
 transformer.process(output_path) """
 
 # Concentric circles method
-image_path = "res/images/sources/bouchon/imabouchon1.jpg"
-detector = ConcentricCirclesDetector(image_path)
-detector.process()
+source_image_path = "res/images/sources/bouchon/imabouchon1.jpg"
+output_image_path = "res/images/generated/ellipses/detected_ellipses.png"
+ellipses_detector = ConcentricEllipsesDetector(source_image_path)
+ellipses_detector.process(output_image_path)
