@@ -1,7 +1,7 @@
 # SAE Vision - Bottle Cap Localization
 
 This project is part of the work completed during the third year of the BUT program in SAE Vision.  
-Its goal is to locate bottle caps in images using two different methods:
+Its goal is to locate bottle caps in images using tree different methods:
 
 - **Method 1**: Detection by pattern and mask  
 - **Method 2**: Detection by concentric circles  
