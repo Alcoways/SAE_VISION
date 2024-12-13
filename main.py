@@ -41,7 +41,6 @@ def generer_openscad(d1,d2,mire,l_mire):
     print("")
 
 
-
 def estimate_rigid_transform(p1_a, p2_a, p1_b, p2_b):
     v_a = np.array([p2_a[0] - p1_a[0], p2_a[1] - p1_a[1]])
     v_b = np.array([p2_b[0] - p1_b[0], p2_b[1] - p1_b[1]])
@@ -93,7 +92,7 @@ def drawcross(image,u,v):
 
 def processImage(image: str, srcPoints):
     if image is None:
-        raise FileNotFoundError(f"Impossible de charger l'image : {image_path}")
+        raise FileNotFoundError(f"Impossible de charger l'image : {image}")
 
     target_points  = np.array([[0, 0], [167, 0], [167, 167], [0, 167]], dtype=np.float32)
     homography, _ = cv2.findHomography(srcPoints, target_points )
@@ -153,15 +152,12 @@ l_mire=80
 mire=0
 generer_openscad(d1,d2,mire,l_mire)
 
-with open('src/data/listecolors.out', 'r') as file:
     couleurs = []
     for line in file:
         values = line.strip().split(',')
         values = tuple(int(float(value.strip())) for value in values)
         couleurs.append(values)
 
-#Choix de points correspondants dans le repere mire et robot 
-points = [(0,0), (80, 80), (345,526), (425,446)]
 
 print("P1 repère mire: ", points[0], "P2 repère mire: ", points[1], "\nP1  repère robot: ", points[2], "P2 repère robot: ", points[3])
 print("")
@@ -172,15 +168,3 @@ print(f"Theta: {theta} \nTranslation_x: {translation_x} \nTranslation_y: {transl
 print("")
 
 create_pattern_and_mask(32,32,22,couleurs[1],couleurs[0])
-
-#COORDONEES COIN MIRE EXEMPLE INETDOC
-# pixels_mire_source = np.array([[991, 564], [655, 489], [593, 831], [949, 900]], dtype=np.float32)
-# image = cv2.imread("src/images/bouchon/imabouchon1.jpg")
-
-#COORDONEES COIN MIRE EXEMPLE OPENSCAD
-pixels_mire_source = np.array([[1409,245], [691, 106], [399,659], [1250,860]], dtype=np.float32)
-image = cv2.imread("imabouchon_openscad.png")
-
-
-bouchon_mire = processImage(image, pixels_mire_source)
-afficher_coordonées(bouchon_mire)
