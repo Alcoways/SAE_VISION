@@ -33,7 +33,7 @@ def generer_openscad(d1,d2,mire,l_mire):
         "-D", f"mire={mire}",
         "--camera", "58,30,12,40,0,16,246",
         "--imgsize", "1920,1080",
-        "-o", "imabouchon_openscad.png",
+        "-o", "res/image/sources/imabouchon_openscad.png",
         chemin_scad 
     ]
     print("Commande générée :", " ".join(commande))
@@ -80,8 +80,8 @@ def create_pattern_and_mask(width, d1, d2, bgr_color_center, bgr_color_contour):
                 img_bouchon[u,v] = (bgr_color_contour) 
                 img_mask_bouchon[u,v] = (255,255,255)
 
-    cv2.imwrite('src/images/template/template_bouchon.png', img_bouchon)
-    cv2.imwrite('src/images/template/template_mask_bouchon.png', img_mask_bouchon)
+    cv2.imwrite('res/images/template/template_bouchon.png', img_bouchon)
+    cv2.imwrite('res/images/template/template_mask_bouchon.png', img_mask_bouchon)
 
 
 
@@ -91,9 +91,10 @@ def drawcross(image,u,v):
 
 
 
-def processImage(image: str, srcPoints):
+def processImage(image_path: str, srcPoints):
+    image = cv2.imread(image_path, cv2.IMREAD_COLOR)
     if image is None:
-        raise FileNotFoundError(f"Impossible de charger l'image : {image_path}")
+        raise FileNotFoundError(f"Image not found at: {image_path}")
 
     target_points  = np.array([[0, 0], [167, 0], [167, 167], [0, 167]], dtype=np.float32)
     homography, _ = cv2.findHomography(srcPoints, target_points )
@@ -101,8 +102,8 @@ def processImage(image: str, srcPoints):
 
     # transformed_image = cv2.imread("src/images/bouchon/imabouchon2_rect.jpg")
 
-    template = cv2.imread('src/images/template/template_bouchon.png')
-    mask = cv2.imread('src/images/template/template_mask_bouchon.png')
+    template = cv2.imread('res/images/template/template_bouchon.png')
+    mask = cv2.imread('res/images/template/template_mask_bouchon.png')
     w, h,  = template.shape[:2]
     result = cv2.matchTemplate(transformed_image, template, cv2.TM_CCORR_NORMED , mask=mask)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
@@ -119,7 +120,7 @@ def processImage(image: str, srcPoints):
     else:
         center = None
 
-    cv2.imwrite("imabouchon_openscad_rect_detection.png", transformed_image)
+    cv2.imwrite("res/image/generated/imabouchon_openscad_rect_detection.png", transformed_image)
     # cv2.imshow('Template Matching', transformed_image)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
@@ -153,7 +154,7 @@ l_mire=80
 mire=0
 generer_openscad(d1,d2,mire,l_mire)
 
-with open('src/data/listecolors.out', 'r') as file:
+with open('res/data/listecolors.out', 'r') as file:
     couleurs = []
     for line in file:
         values = line.strip().split(',')
@@ -179,7 +180,7 @@ create_pattern_and_mask(32,32,22,couleurs[1],couleurs[0])
 
 #COORDONEES COIN MIRE EXEMPLE OPENSCAD
 pixels_mire_source = np.array([[1409,245], [691, 106], [399,659], [1250,860]], dtype=np.float32)
-image = cv2.imread("imabouchon_openscad.png")
+image = cv2.imread("res/image/sources/imabouchon_openscad.png")
 
 
 bouchon_mire = processImage(image, pixels_mire_source)
