@@ -1,8 +1,6 @@
 import cv2
 import numpy as np
 
-# Method 1
-
 # Method 2
 class ConcentricCirclesDetector:
     def __init__(self, image_path: str):
