@@ -8,9 +8,9 @@ B = np.array([[1, 1], [2, 1]])
 
 estimator = RigidTransform2DEstimator(A[0], A[1], B[0], B[1])
 theta, translation_x, translation_y = estimator.estimate()
-print(f"theta: {theta} \ntranslation_x: {translation_x} \ntranslation_y: {translation_y}")
+print(f"theta: {theta} \ntranslation_x: {translation_x} \ntranslation_y: {translation_y}") """
 
-generator = TestPointGenerator()
+""" generator = TestPointGenerator()
 test_data = generator.generate_test_data()
 
 print(f"theta: {test_data['theta']} \n tx: {test_data['tx']} \n ty: {test_data['ty']}")
@@ -33,8 +33,29 @@ output_path = "res/images/generated/bouchon/transformed_image.png"
 transformer = ImageTransformer(image_path, pixels_mire_source)
 transformer.process(output_path) """
 
-# Concentric circles method
-source_image_path = "res/images/sources/bouchon/imabouchon1.jpg"
-output_image_path = "res/images/generated/ellipses/detected_ellipses.png"
-ellipses_detector = ConcentricEllipsesDetector(source_image_path)
-ellipses_detector.process(output_image_path)
+if __name__ == "name":
+
+    print("Choose method type: \n 1: Pattern and mask \n 2: Concentric circles \n 3: Concentric ellipses")
+    method = int(input())
+
+    match method:
+        case 1:
+            # Pattern and mask method
+            pass
+        case 2:
+            # Concentric circles method
+            image_path = "res/images/sources/bouchon/imabouchon1.jpg"
+            output_path = "res/images/generated/circles/concentric_circles_detected.png"
+
+            detector = ConcentricCirclesDetector(image_path)
+            detector.process(output_path)
+        case 3:
+            # Concentric ellipses method
+            image_path = "res/images/sources/bouchon/imabouchon1.jpg"
+            output_path = "res/images/generated/ellipses/concentric_ellipses.png"
+
+            detector = ConcentricEllipsesDetector(image_path)
+            detector.process(output_path)
+
+
+

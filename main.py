@@ -69,7 +69,7 @@ def drawcross(image,u,v):
 def processImage(image: str, srcPoints):
 
     if image is None:
-        raise FileNotFoundError(f"Impossible de charger l'image : {image_path}")
+        raise FileNotFoundError(f"Impossible de charger l'image : {image}")
 
     target_points  = np.array([[0, 0], [167, 0], [167, 167], [0, 167]], dtype=np.float32)
     homography, _ = cv2.findHomography(srcPoints, target_points )
@@ -118,7 +118,7 @@ def processImage(image: str, srcPoints):
 
 #Programme
 
-with open('src/data/listecolors.out', 'r') as file:
+with open('res/data/listecolors.out', 'r') as file:
     # Créer une liste pour stocker les données
     couleurs = []
     
@@ -133,7 +133,7 @@ with open('src/data/listecolors.out', 'r') as file:
         # Ajouter les valeurs extraites à la liste data
         couleurs.append(values)
 
-with open('src/data/listepoints.out', 'r') as file:
+with open('res/data/listepoints.out', 'r') as file:
     points = []
     
     # Lire chaque ligne du fichier
@@ -154,5 +154,5 @@ print(f"theta: {theta} \n translation_x: {translation_x} \n translation_y: {tran
 
 create_pattern_and_mask(32,32,22,couleurs[1],couleurs[0])
 pixels_mire_source = np.array([[991, 564], [655, 489], [593, 831], [949, 900]], dtype=np.float32)
-image = cv2.imread("src/images/bouchon/imabouchon1.jpg")
+image = cv2.imread("res/images/sources/bouchon/imabouchon1.jpg")
 processImage(image, pixels_mire_source)
